@@ -1,0 +1,9 @@
+accelerate==0.20.3
+bitsandbytes==0.39.0
+datasets==2.12.0
+numpy==1.22.4
+peft @ git+https://github.com/huggingface/peft.git@189a6b8e357ecda05ccde13999e4c35759596a67
+scikit-learn==1.2.2
+scipy==1.7.3
+torch==2.1.0.dev20230615+cu121
+transformers @ git+https://github.com/huggingface/transformers.git@0b7b4429c78de68acaf72224eb6dae43616d820c
