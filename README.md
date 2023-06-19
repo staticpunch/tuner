@@ -7,3 +7,4 @@ conda activate finetune
 pip install -r requirements.txt 
 conda install cudatoolkit
 ```
+demo chat-bloom-3b: https://colab.research.google.com/drive/1CY-dOlwtOqC6TEXJw3BTFiq8-_esEfHB?usp=sharing
