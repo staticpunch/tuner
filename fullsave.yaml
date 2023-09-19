@@ -1,0 +1,41 @@
+base_model: Llama-2-7b-hf/
+base_model_config: Llama-2-7b-hf/
+model_type: LlamaForCausalLM
+tokenizer_type: LlamaTokenizer
+
+bf16: true
+dataset_prepared_path: last_run_prepared
+# local
+datasets:
+  - path: dataset.jsonl
+    type: alpaca # format from earlier.
+    
+eval_steps: 100
+flash_attention: true
+gradient_accumulation_steps: 1
+gradient_checkpointing: true
+learning_rate: 2.0e-05
+logging_steps: 1
+
+micro_batch_size: 1
+num_epochs: 1
+output_dir: llama2-7b-full-closed_qa
+sequence_len: 4096
+sample_packing: true
+val_set_size: 0.01
+train_on_inputs: false
+group_by_length: false
+save_steps:
+
+fsdp:
+  - full_shard
+  - auto_wrap
+fsdp_config:
+  fsdp_offload_params: true
+  fsdp_state_dict_type: FULL_STATE_DICT
+  fsdp_transformer_layer_cls_to_wrap: LlamaDecoderLayer
+
+# deepspeed: deepspeed/zero3.json
+
+wandb_entity: null
+wandb_project: null
