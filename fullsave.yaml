@@ -39,3 +39,54 @@ fsdp_config:
 
 wandb_entity: null
 wandb_project: null
+
+------------------------------------
+ISSUE
+{'loss': 0.4025, 'learning_rate': 8.65142516781603e-11, 'epoch': 1.0}                                                                             
+{'loss': 0.4785, 'learning_rate': 4.866429726857469e-11, 'epoch': 1.0}                                                                            
+{'loss': 0.3889, 'learning_rate': 2.1628586309718757e-11, 'epoch': 1.0}                                                                           
+{'loss': 0.6596, 'learning_rate': 5.407148039315857e-12, 'epoch': 1.0}                                                                            
+{'loss': 0.3624, 'learning_rate': 0.0, 'epoch': 1.0}                                                                                              
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 3094/3094 [12:19:26<00:00, 14.19s/it]/root/miniconda3/envs/py3.10/lib/python3.10/site-packages/transformers/generation/configuration_utils.py:508: UserWarning: The generation config instance is invalid -- `.validate()` throws warnings and/or exceptions. Fix these issues to save the configuration. This warning will be raised to an exception in v4.34.
+
+Thrown during validation:
+`do_sample` is set to `False`. However, `temperature` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+  warnings.warn(
+WARNING:torch.distributed.elastic.multiprocessing.api:Sending process 50114 closing signal SIGTERM
+WARNING:torch.distributed.elastic.multiprocessing.api:Sending process 50115 closing signal SIGTERM
+WARNING:torch.distributed.elastic.multiprocessing.api:Sending process 50116 closing signal SIGTERM
+WARNING:torch.distributed.elastic.multiprocessing.api:Sending process 50117 closing signal SIGTERM
+WARNING:torch.distributed.elastic.multiprocessing.api:Sending process 50118 closing signal SIGTERM
+WARNING:torch.distributed.elastic.multiprocessing.api:Sending process 50119 closing signal SIGTERM
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: -9) local_rank: 0 (pid: 50113) of binary: /root/miniconda3/envs/py3.10/bin/python
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/py3.10/bin/accelerate", line 8, in <module>
+    sys.exit(main())
+  File "/root/miniconda3/envs/py3.10/lib/python3.10/site-packages/accelerate/commands/accelerate_cli.py", line 47, in main
+    args.func(args)
+  File "/root/miniconda3/envs/py3.10/lib/python3.10/site-packages/accelerate/commands/launch.py", line 977, in launch_command
+    multi_gpu_launcher(args)
+  File "/root/miniconda3/envs/py3.10/lib/python3.10/site-packages/accelerate/commands/launch.py", line 646, in multi_gpu_launcher
+    distrib_run.run(args)
+  File "/root/miniconda3/envs/py3.10/lib/python3.10/site-packages/torch/distributed/run.py", line 785, in run
+    elastic_launch(
+  File "/root/miniconda3/envs/py3.10/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 134, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/root/miniconda3/envs/py3.10/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 250, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+======================================================
+axolotl.cli.train FAILED
+------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2023-09-19_22:15:16
+  host      : hlc7f-kgm-dgx-04.vtcc.vn
+  rank      : 0 (local_rank: 0)
+  exitcode  : -9 (pid: 50113)
+  error_file: <N/A>
+  traceback : Signal 9 (SIGKILL) received by PID 50113
+======================================================
