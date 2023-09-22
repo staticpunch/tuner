@@ -69,7 +69,7 @@ input_template = "Hỏi: {question}\n{context}\nĐáp: "
 with open("../data/results.jsonl", "w") as f:
     for i, rtr in enumerate(retrieved):
         question, context, _ = rtr.values()
-        input = input_tempalte.format(question=question, context=context)
+        input = input_template.format(question=question, context=context)
         prompt = prompter.build_prompt(instruction=instruction, input=input, output="").__next__()
         output = get_answer(prompt)
         d = json.dumps(dict(quest_id=i, answer_predict=output)) + "\n"
