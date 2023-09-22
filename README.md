@@ -12,3 +12,4 @@ demo chat-bloom-3b: https://colab.research.google.com/drive/1CY-dOlwtOqC6TEXJw3B
 ```
 CUDA_VISIBLE_DEVICES=0,1 accelerate launch scripts/finetune.py examples/llama-2/closed_qa.yml
 ```
+1HlzUwi9lBur6iPOZiEPmyveW_6TA3jnW
