@@ -280,6 +280,28 @@ PROMPT_DICT = {
     ),
 }
 
+MY_PROMPT_DICT = {
+    "prompt_with_input_en": (
+        "Below is an instruction that describes a task, paired with an input that provides further context. "
+        "Write a response that appropriately completes the request.\n\n"
+        "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:\n"
+    ),
+    "prompt_without_input_en": (
+        "Below is an instruction that describes a task. "
+        "Write a response that appropriately completes the request.\n\n"
+        "### Instruction:\n{instruction}\n\n### Response:\n"
+    ),
+    "prompt_with_input_vi": (
+        "Dưới đây là chỉ dẫn mô tả một nhiệm vụ, kèm theo đầu vào để cung cấp thêm ngữ cảnh. "
+        "Đưa ra một phản hồi thích hợp để hoàn thành nhiệm vụ đó.\n\n"
+        "### Instruction:\n{instruction}\n\n### Input:\n{input}\n\n### Response:\n"
+    ),
+    "prompt_without_input_vi": (
+        "Dưới đây là chỉ dẫn mô tả một nhiệm vụ. "
+        "Đưa ra một phản hồi thích hợp để hoàn thành nhiệm vụ đó.\n\n"
+        "### Instruction:\n{instruction}\n\n### Response:\n"
+    ),
+}
 
 def create_prompts(examples):
     prompts = {}
@@ -294,7 +316,7 @@ def create_prompts(examples):
         prompts["target"].append(example["output"])
     return prompts
 
-def my_create_prompts(examples):
+def create_prompts_v2(examples):
     prompts = {}
     prompts["source"] = []
     prompts["target"] = []
@@ -306,6 +328,33 @@ def my_create_prompts(examples):
         source = prompt_template.format_map(example)
         prompts["source"].append(source)
         prompts["target"].append(example["output"])
+    return prompts
+
+def create_prompts_v3(examples):
+    prompts = {}
+    prompts["source"] = []
+    prompts["target"] = []
+    for example in examples:
+        if example.get("lang") == "vi":
+            prompt_template = MY_PROMPT_DICT["prompt_without_input_vi"]
+            assert len(example.get("input")) == 0
+            if example.get("input"):
+                prompt_template = MY_PROMPT_DICT["prompt_with_input_vi"]
+
+            source = prompt_template.format_map(example)
+            prompts["source"].append(source)
+            prompts["target"].append(example["output"])
+        elif example.get("lang") == "en":
+            prompt_template = MY_PROMPT_DICT["prompt_without_input_en"]
+            assert len(example.get("input")) == 0
+            if example.get("input"):
+                prompt_template = MY_PROMPT_DICT["prompt_with_input_en"]
+
+            source = prompt_template.format_map(example)
+            prompts["source"].append(source)
+            prompts["target"].append(example["output"])
+        else:
+            raise NotImplementedError()
     return prompts
 
 
@@ -447,6 +496,8 @@ def main():
             use_auth_token=True if model_args.use_auth_token else None,
             **dataset_args,
         )
+        logger.info(f"Shuffling data with seed = {data_args.dataset_seed}")
+        raw_datasets = raw_datasets.shuffle(seed=data_args.dataset_seed)
 
         # If no validation data is there, validation_split_percentage will be used to divide the dataset.
         if "validation" not in raw_datasets.keys() and training_args.do_eval:
@@ -495,12 +546,14 @@ def main():
         ## NOTE: read local file
         print(raw_datasets)
         for key in raw_datasets:
-            prompts = my_create_prompts(raw_datasets[key])
+            prompts = create_prompts_v3(raw_datasets[key])
             columns_to_be_removed = list(raw_datasets[key].features.keys())
             raw_datasets[key] = raw_datasets[key].add_column("prompt_sources", prompts["source"])
             raw_datasets[key] = raw_datasets[key].add_column("prompt_targets", prompts["target"])
             raw_datasets[key] = raw_datasets[key].remove_columns(columns_to_be_removed)
         print(raw_datasets)
+        logger.info("Data examples")
+        print(raw_datasets["train"][42])
         ## END NOTE.
 
     # Load model
@@ -594,7 +647,11 @@ def main():
         logger.info(f">>> Total number of tokens: {total_tokens}")
         logger.info(f">>> Number of tokens taking loss: {train_tokens}")
         ### END NOTE
-
+    # print(tokenized_datasets)
+    # print(tokenizer.decode(tokenized_datasets["train"][0]["input_ids"]))
+    # print(tokenizer.decode([i for i in tokenized_datasets["train"][0]["labels"] if i >= 0]))
+    # return 
+    
     if data_args.dataset_concatenation:
         def concatenate_data(dataset, max_seq_length):
             concatenated_dataset = {}
@@ -739,7 +796,8 @@ def main():
             if is_main_process(training_args.local_rank):
                 unwrapped_model = unwrap_model(model)
                 unwrapped_model.save_pretrained(training_args.output_dir, state_dict=unwrapped_model.state_dict())
-
+                tokenizer.save_pretrained(training_args.output_dir)
+                
         # Evaluation
     if training_args.do_eval:
         logger.info("*** Evaluate ***")
