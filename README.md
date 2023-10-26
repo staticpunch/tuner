@@ -1,4 +1,4 @@
-# finetune-gpt
+# gpt-tuner
 This repo implements a simple LoRA/QLoRA finetuning, 8bit & 4bit quantization. You can finetune models up to 7b parameters with only 24GB GPU.
 To install:
 ```
