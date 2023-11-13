@@ -373,6 +373,14 @@ def main():
         model_args, data_args, training_args, finetune_args = parser.parse_json_file(
             json_file=os.path.abspath(sys.argv[1])
         )
+    ## NOTE: add yaml config file
+    elif len(sys.argv) == 2 and sys.argv[1].endswith(".yaml"):
+        # If we pass only one argument to the script and it's the path to a json file,
+        # let's parse it to get our arguments.
+        model_args, data_args, training_args, finetune_args = parser.parse_yaml_file(
+            json_file=os.path.abspath(sys.argv[1])
+        )
+    ## END NOTE
     else:
         (
             model_args,
