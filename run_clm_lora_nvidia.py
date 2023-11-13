@@ -1,22 +1,3 @@
-#!/usr/bin/env python
-# coding=utf-8
-
-# Apache v2 license
-# Copyright (C) 2022 Intel Corporation
-# SPDX-License-Identifier: Apache-2.0
-
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import copy
 import logging
 import math
@@ -29,6 +10,7 @@ import datasets
 import evaluate
 import torch
 import transformers
+import bitsandbytes as bnb
 from datasets import load_dataset
 from peft import (
     LoraConfig,
@@ -41,6 +23,7 @@ from transformers import (
     AutoTokenizer,
     DataCollatorForLanguageModeling,
     HfArgumentParser,
+    BitsAndBytesConfig,
     set_seed
 )
 from transformers import (
@@ -113,7 +96,6 @@ def print_trainable_parameters(model):
         f"all params: {all_param} || "
         f"trainable: {100 * trainable_params / all_param}"
     )
-
 @dataclass
 class ModelArguments:
     """
@@ -280,7 +262,10 @@ class FinetuneArguments:
         default=False,
         metadata={"help": "if True, go full finetune"}
     )
-
+    kbits: int = field(
+        default=16,
+        metadata={"help": "4bits for QloRA, 8bits for LoRA, 16 or 32bits for normal LoRA no quantization."}
+    )
 
 PROMPT_DICT = {
     "prompt_with_input": (
@@ -372,7 +357,6 @@ def create_prompts_v3(examples):
             raise NotImplementedError()
     return prompts
 
-
 def main():
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
@@ -380,7 +364,9 @@ def main():
 
     # parser = HfArgumentParser((ModelArguments, DataArguments, GaudiTrainingArguments, FinetuneArguments))
     parser = HfArgumentParser((ModelArguments, DataArguments, TrainingArguments, FinetuneArguments))
-
+    # model_args, data_args, training_args, finetune_args = parser.parse_yaml_file(
+    #     yaml_file="/kaggle/working/config.yaml"
+    # )
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
@@ -574,17 +560,50 @@ def main():
 
     # Load model
     if model_args.model_name_or_path:
+        device_map = "auto"
+
+        # if we are in a distributed setting, we need to set the device map and max memory per device
+        if os.environ.get('LOCAL_RANK') is not None:
+            local_rank = int(os.environ.get('LOCAL_RANK', '0'))
+            device_map = {'': local_rank}
+            
         model_dtype = torch.bfloat16 if training_args.bf16 else None
+
+        ## NOTE: add quantization config
+        bnb_config = BitsAndBytesConfig() ## default 
+        if finetune_args.kbits == 4:
+            print(
+                f"Quantization 4 bit"
+            )
+            bnb_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.bfloat16
+            )
+        elif finetune_args.kbits == 8:
+            print(
+                f"Quantization 8 bit"
+            )
+            bnb_config = BitsAndBytesConfig(
+                load_in_8bit=True,
+            )
+        ## END NOTE
+
         model = AutoModelForCausalLM.from_pretrained(
             model_args.model_name_or_path,
             from_tf=bool(".ckpt" in model_args.model_name_or_path),
+            load_in_4bit=(finetune_args.kbits == 4),
+            load_in_8bit=(finetune_args.kbits == 8),
             config=config,
+            quantization_config=bnb_config,
             cache_dir=model_args.cache_dir,
             revision=model_args.model_revision,
             use_auth_token=True if model_args.use_auth_token else None,
             trust_remote_code=True if model_args.trust_remote_code else None,
             torch_dtype=model_dtype,
             low_cpu_mem_usage=model_args.low_cpu_mem_usage,
+            device_map=device_map
         )
     else:
         raise ValueError("Must provide model_name_or_path to load a pretrained CausalLM model.")
@@ -831,7 +850,5 @@ def main():
 
         trainer.log_metrics("eval", metrics)
         trainer.save_metrics("eval", metrics)
-
-
 if __name__ == "__main__":
     main()
