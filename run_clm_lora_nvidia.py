@@ -357,6 +357,16 @@ def create_prompts_v3(examples):
             raise NotImplementedError()
     return prompts
 
+def create_prompts_v4(examples):
+    prompts = {}
+    prompts["source"] = []
+    prompts["target"] = []
+    for example in examples:
+        prompts["source"].append("")
+        prompts["target"].append(example["text"])
+    return prompts
+
+
 def main():
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
@@ -556,7 +566,7 @@ def main():
         ## NOTE: read local file
         print(raw_datasets)
         for key in raw_datasets:
-            prompts = create_prompts_v3(raw_datasets[key])
+            prompts = create_prompts_v4(raw_datasets[key])
             columns_to_be_removed = list(raw_datasets[key].features.keys())
             raw_datasets[key] = raw_datasets[key].add_column("prompt_sources", prompts["source"])
             raw_datasets[key] = raw_datasets[key].add_column("prompt_targets", prompts["target"])
