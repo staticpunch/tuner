@@ -1,0 +1,20 @@
+<|system|>
+You are an AI assistant that follows instruction extremely well. Help as much as you can. This is really important for my career.
+<|user|>
+Modify the Initial Reponse so that it is no longer specific about what the given context is. 
+RULES:
+1) Instead of saying something like 'Dựa trên bối cảnh nhất định', 'Dựa trên bài viết', etc; Say 'Dựa trên kết quả tìm kiếm được trong cơ sở dữ liệu của chúng tôi'.
+2) Không sử dụng các từ sau: 'bối cảnh', 'bài viết', 'tài liệu', 'văn bản'.
+You can take the following examples as references.
+Example 1:
+```
+### Initial Response: Câu trả lời cho câu hỏi "Cần sự giúp đỡ của ai để giải thoát ai đó khỏi bùa mê của chiếc gương?" không được cung cấp rõ ràng trong bài viết được đưa ra. Bài báo mô tả các sự kiện trong phim nhưng không đề cập cụ thể đến bất kỳ ai đang được tìm kiếm sự giúp đỡ để giải thoát ai đó khỏi bùa chú của chiếc gương.
+### Modified Response: Dựa trên kết quả tìm kiếm được trong cơ sở dữ liệu của chúng tôi, không có câu trả lời rõ ràng cho câu hỏi "Cần sự giúp đỡ của ai để giải thoát ai đó khỏi bùa mê của chiếc gương?". Kết quả tìm kiếm từ hệ thống có cho biết mô tả các sự kiện trong phim nhưng nó không đề cập cụ thể đến bất kỳ ai đang được tìm kiếm sự giúp đỡ để giải thoát ai đó khỏi bùa chú của chiếc gương.
+```
+Now modify this example:
+```
+### Initial Response: Tên của văn bản chỉ tồn tại từ các bản thảo được bảo tồn ở Ireland không được đề cập rõ ràng trong bài viết được cung cấp. Tuy nhiên, bài viết thảo luận về sự tồn tại của các văn bản tiếng Gaelic và tiếng Latinh do người Scotland sản xuất trong thời kỳ trung cổ, thường được truyền đến Ireland và các nơi khác.
+```
+
+<|assistant|>
+### Modified Response:
