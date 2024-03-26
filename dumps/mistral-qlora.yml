@@ -10,7 +10,7 @@ datasets:
   - path: roleplay4fun/20240326_pippa_segmented_experiment_00
     type: input_output
 dataset_prepared_path: last_run_prepared
-val_set_size: 0.1
+val_set_size: 0.0
 output_dir: ./qlora-out
 
 adapter: qlora
@@ -65,7 +65,7 @@ loss_watchdog_threshold: 5.0
 loss_watchdog_patience: 3
 
 warmup_steps: 10
-evals_per_epoch: 4
+evals_per_epoch: 
 eval_table_size:
 eval_max_new_tokens: 128
 saves_per_epoch: 1
