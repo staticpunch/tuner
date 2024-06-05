@@ -1,3 +1,82 @@
+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
+base_model: thanhdaonguyen/abllama-3-instruct
+model_type: LlamaForCausalLM
+tokenizer_type: AutoTokenizer
+
+load_in_8bit: false
+load_in_4bit: false
+strict: false
+
+datasets:
+  - path: meseca/trismegistus-5k-v0.1
+    type: sharegpt
+    conversation: llama-3
+  - path: meseca/systemchat-20k-v0.1
+    type: sharegpt
+    conversation: llama-3
+  - path: meseca/claude-15k-v0.1
+    type: sharegpt
+    conversation: llama-3
+  - path: meseca/pippa-limarp-verbose-1k-v0.1
+    type: sharegpt
+    conversation: llama-3
+  - path: meseca/capybara-16k-v0.1
+    type: sharegpt
+    conversation: llama-3
+  - path: meseca/wizard-6k-v0.1
+    type: sharegpt
+    conversation: llama-3
+    
+val_set_size: 0.0
+output_dir: ./outputs/05062024-v1
+
+sequence_len: 4096
+sample_packing: false
+pad_to_sequence_len: true
+
+wandb_project:
+wandb_entity:
+wandb_watch:
+wandb_name:
+wandb_log_model:
+
+gradient_accumulation_steps: 8
+micro_batch_size: 4
+num_epochs: 2
+optimizer: paged_adamw_8bit
+lr_scheduler: cosine
+learning_rate: 2e-5
+
+train_on_inputs: true
+group_by_length: false
+bf16: auto
+fp16:
+tf32: false
+
+gradient_checkpointing: truefdssf
+gradient_checkpointing_kwargs:
+  use_reentrant: false
+early_stopping_patience:
+resume_from_checkpoint:
+logging_steps: 5
+xformers_attention:
+flash_attention: true
+
+warmup_steps: 20
+evals_per_epoch: 2
+eval_table_size:
+saves_per_epoch: 1
+debug:
+deepspeed: ./deepspeed_configs/zero3_bf16.json
+weight_decay: 0.05
+fsdp:
+fsdp_config:
+special_tokens:
+  pad_token: <|end_of_text|>
+
+hub_model_id: meseca/05062024-v1
+hub_strategy: end
+hf_use_auth_token: true
 base_model: thanhdaonguyen/abllama-3-instruct
 model_type: LlamaForCausalLM
 tokenizer_type: AutoTokenizer
