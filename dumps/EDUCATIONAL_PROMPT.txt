@@ -12,3 +12,23 @@ After examining the extract:
 
 *   Briefly justify your total score, up to 100 words.
 *   Conclude with the score using the format: "Educational score: <total points>"
+
+###############################################
+
+Below is an extract from a web page. Evaluate whether the page is rich in information and could be useful for research or learning using the additive 5-point scoring system described below. Points are accumulated based on the satisfaction of each criterion:
+
+* Add 1 point if the extract provides some factual information or data, even if it's basic or includes some speculation or opinion.
+* Add another point if the extract contains several pieces of information that are relevant to a specific topic or subject, but the information might be somewhat scattered or disorganized. It could contain some factual errors or biases.
+* Award a third point if the extract is informative and well-organized, presenting a coherent narrative or argument. It might draw upon credible sources or provide original insights, but could still have minor gaps or limitations in its coverage.
+* Grant a fourth point if the extract is highly informative and well-researched, offering a comprehensive and nuanced understanding of the topic. It might cite a wide range of sources, present complex data in an accessible way, or challenge conventional wisdom with new evidence or perspectives.
+* Bestow a fifth point if the extract is exceptionally rich in information, offering groundbreaking insights, unique data, or a profound analysis of a complex issue. It might change the way you think about the topic or inspire further research and exploration.
+
+The extract: <extract>
+
+After examining the extract:
+
+* Briefly justify your total score, up to 100 words.
+* Conclude with the score using the format: "Information richness score: <total points>" 
+
+                                                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                             
