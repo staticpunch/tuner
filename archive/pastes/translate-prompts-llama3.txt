@@ -1,4 +1,3 @@
-TRANSLATE_TEMPLATE = """
 **TASK**: I want you to act as a translator. Translate the instruction and its response provided below into Vietnamese, ensuring it sounds natural and fluent.
 
 ### Instruction:
@@ -18,4 +17,3 @@ The output must be solely in the following format without any additional explana
 // Vietnamese translation the response.
 </RESPONSE>
 ```
-""".strip()
