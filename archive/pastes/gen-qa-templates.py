@@ -183,3 +183,55 @@ YÊU CẦU ĐẦU RA:
 - Các câu hỏi phải đại diện cho các mức độ khó và kỹ năng khác nhau
 - Nội dung trong các tag phải được viết trên một dòng (không xuống dòng)
 """.strip()
+
+conversation_template = """
+Bạn là một trợ lý ảo chuyên về việc trích xuất thông tin và tạo ra những cuộc hội thoại sâu sắc. Với một văn bản về một chủ đề cụ thể (ví dụ: kinh doanh, chính sách, công nghệ), nhiệm vụ của bạn là tạo ra một cuộc hội thoại chi tiết giữa một "Người dùng" (User) và chính bạn, "Trợ lý ảo" (Virtual Assistant), dựa *hoàn toàn* vào thông tin được cung cấp trong văn bản đầu vào. Cuộc trò chuyện phải được đặt trong bối cảnh mà Người dùng không biết gì về tài liệu, và bạn (Trợ lý ảo) cần sử dụng nội dung của tài liệu để trả lời, nhưng sẽ không nhắc đến tài liệu đó, như thể bạn đã biết câu trả lời mà không cần tra cứu ở đâu. Mục tiêu là đi sâu vào các điểm chính, ngụ ý và sắc thái của văn bản. Cuộc hội thoại phải được cấu trúc tốt, diễn ra một cách tự nhiên và ngày càng chi tiết hơn với mỗi lượt trao đổi.
+
+**Đầu vào:**
+
+```
+{{text}}
+```
+
+**Định dạng đầu ra:**
+
+Đầu ra phải là một cuộc hội thoại được định dạng như sau:
+
+```
+<CONVERSATION>
+USER: [Câu hỏi 1 - Đặt một câu hỏi mở, giới thiệu.]
+
+ASSISTANT: [Câu trả lời chi tiết 1 - Cung cấp một câu trả lời toàn diện, sử dụng thông tin từ văn bản đã được cung cấp. Hãy cố gắng trả lời một cách chi tiết nhất có thể. Tránh các câu trả lời chung chung.]
+
+USER: [Câu hỏi 2 - Dựa trên Câu trả lời 1, đặt một câu hỏi cụ thể hơn hoặc thăm dò. Khai thác các chi tiết, các vấn đề tiềm ẩn, hoặc các quan điểm thay thế từ văn bản.]
+
+ASSISTANT: [Câu trả lời chi tiết 2 - Mở rộng Câu trả lời 1, cung cấp thêm ngữ cảnh và các chi tiết cụ thể từ văn bản. Trích dẫn các chi tiết liên quan để hỗ trợ câu trả lời của bạn.]
+
+USER: [Câu hỏi 3 - Xây dựng dựa trên các câu trả lời trước đó. Đặt một câu hỏi kết hợp thông tin, ngụ ý phân tích, hoặc bắt đầu rút ra các kết luận dựa trên các lượt trao đổi trước đó. Khám phá các hệ quả hoặc ngụ ý.]
+
+ASSISTANT: [Câu trả lời chi tiết 3 - Tổng hợp thông tin, liên kết các khía cạnh khác nhau từ văn bản và đưa ra một câu trả lời chu đáo. Liên kết các ý tưởng để cung cấp một cái nhìn tổng thể. Giải thích câu trả lời của bạn bằng cách sử dụng thông tin từ văn bản.]
+
+USER: [Câu hỏi 4 - Đặt một câu hỏi phức tạp hơn, đòi hỏi sự tổng hợp, phân tích và có thể là rút ra những suy luận từ văn bản. Khuyến khích tư duy phản biện.]
+
+ASSISTANT: [Câu trả lời chi tiết 4 - Cung cấp một câu trả lời sắc thái và chu đáo, kết hợp thông tin chính, và đưa ra một phân tích hợp lý. Câu trả lời nên cố gắng giải quyết sự phức tạp tiềm ẩn được trình bày bởi văn bản.]
+
+USER: [Tiếp tục với nhiều câu hỏi và câu trả lời hơn, tăng dần về độ phức tạp và chiều sâu. Đặt các câu hỏi khám phá các ví dụ cụ thể, những thách thức, hoặc các ngụ ý từ văn bản, hoặc đặt các câu hỏi liên kết thông tin từ các phần khác nhau của văn bản.]
+
+ASSISTANT: [Tiếp tục cung cấp các câu trả lời chi tiết, kết nối thông tin, phân tích và giải thích. Luôn trích dẫn thông tin từ văn bản và hướng đến câu trả lời toàn diện và sâu sắc nhất có thể.]
+</CONVERSATION>
+```
+
+**Nguyên tắc:**
+
+*   **Tập trung vào Văn bản:** Các câu trả lời *phải* được trích xuất *chỉ* từ văn bản đầu vào đã được cung cấp. Không thêm thông tin hoặc ý kiến bên ngoài.
+*   **Tránh Lặp lại:** Trong khi xây dựng dựa trên các câu trả lời trước đó, hãy tránh lặp lại thông tin một cách đơn thuần. Hãy mở rộng và làm rõ hơn.
+*   **Chi tiết và Giải thích:** Cung cấp các câu trả lời đầy đủ, cụ thể, và được hỗ trợ tốt. Sử dụng trích dẫn trực tiếp hoặc diễn giải từ văn bản để hỗ trợ các điểm của bạn, nhưng không sao chép và dán toàn bộ câu.
+*   **Cuộc trò chuyện Tự nhiên:** Cuộc trò chuyện nên diễn ra một cách tự nhiên và tuân theo một dòng logic. Các câu hỏi nên xây dựng dựa trên các câu trả lời trước đó.
+*   **Độ phức tạp Tăng dần:** Tăng dần độ phức tạp của các câu hỏi. Bắt đầu với các câu hỏi sự kiện đơn giản, và sau đó chuyển sang các câu hỏi phân tích và suy luận.
+*   **Đa dạng Câu hỏi:** Bao gồm các loại câu hỏi khác nhau (Ai, Cái gì, Khi nào, Ở đâu, Tại sao, Như thế nào).
+*   **Tránh các phát biểu Meta:** Không bắt đầu các câu trả lời bằng các cụm từ như "Theo văn bản..." hoặc "Dựa trên đoạn văn...". Trả lời trực tiếp vào câu hỏi.
+*   **Ngôn ngữ Tiếng Việt:** Toàn bộ cuộc trò chuyện phải bằng tiếng Việt.
+*   **Xưng hô:** Người dùng xưng "tôi" (hoặc "tớ", "cháu"... tùy theo ngữ cảnh), và bạn (Trợ lý ảo) xưng "tôi" (hoặc "em", "cháu"... tùy theo ngữ cảnh).
+""".strip()
+
+increase_complexity = "Câu hỏi cần sâu sắc hơn và nội dung trả lời cần được diễn giải chi tiết hơn nữa."
