@@ -101,8 +101,10 @@ Các câu trả lời phải được đặt trong cặp thẻ `<ANSWERS>` và `
 mmlu_template = """
 Bạn là một chuyên gia trong việc tạo câu hỏi trắc nghiệm chất lượng cao. Nhiệm vụ của bạn là tạo các câu hỏi trắc nghiệm dựa trên văn bản đầu vào, tuân theo định dạng và tiêu chuẩn của bộ câu hỏi MMLU (Massive Multitask Language Understanding).
 
-HƯỚNG DẪN:
+VĂN BẢN ĐẦU VÀO:
+{{text}}
 
+HƯỚNG DẪN:
 1. Phân tích văn bản đầu vào và xác định:
    - Các khái niệm chính
    - Các mối quan hệ quan trọng
@@ -123,65 +125,60 @@ HƯỚNG DẪN:
    - Độ dài các phương án nên tương đương nhau
    - Tránh các từ như "tất cả", "không bao giờ" trong phương án
 
-4. Định dạng câu hỏi:
-Câu hỏi 1:
-[Nội dung câu hỏi]
-
-A) [Phương án A]
-B) [Phương án B]
-C) [Phương án C]
-D) [Phương án D]
-
-Đáp án đúng: [Chữ cái đáp án]
-Giải thích: [Giải thích ngắn gọn tại sao đáp án này đúng]
-
 VÍ DỤ:
-
 Văn bản đầu vào:
 "Trong lập trình hướng đối tượng, tính đa hình cho phép một phương thức có thể có nhiều hình thái khác nhau. Điều này được thực hiện thông qua việc ghi đè (override) phương thức của lớp cha trong lớp con hoặc nạp chồng (overload) phương thức trong cùng một lớp."
 
-Câu hỏi mẫu:
-Trong ngữ cảnh lập trình hướng đối tượng, điều nào sau đây mô tả chính xác nhất về mối quan hệ giữa tính đa hình và ghi đè phương thức?
+--- Câu hỏi 1 ---
+Q: Trong ngữ cảnh lập trình hướng đối tượng, điều nào sau đây mô tả chính xác nhất về mối quan hệ giữa tính đa hình và ghi đè phương thức?
 
 A) Ghi đè phương thức là cách duy nhất để thực hiện tính đa hình
 B) Tính đa hình cho phép thực hiện ghi đè phương thức, nhưng không phải là điều kiện bắt buộc
 C) Ghi đè phương thức là một cơ chế thực hiện tính đa hình trong quan hệ kế thừa
 D) Tính đa hình và ghi đè phương thức là hai khái niệm hoàn toàn độc lập
 
-Đáp án đúng: C
-Giải thích: Ghi đè phương thức là một cách cụ thể để thực hiện tính đa hình trong quan hệ kế thừa giữa các lớp, cho phép lớp con định nghĩa lại hành vi của phương thức từ lớp cha.
+ĐÁP ÁN: C
+ĐỘ KHÓ: intermediate
 
-YÊU CẦU ĐẦU VÀO:
-Hãy cung cấp văn bản mà bạn muốn tạo câu hỏi. Văn bản nên chứa đủ thông tin để tạo ít nhất 3-5 câu hỏi chất lượng cao.
+GIẢI THÍCH: 
+A) Sai: Ghi đè phương thức không phải là cách duy nhất để thực hiện tính đa hình. Nạp chồng phương thức (overloading) cũng là một cách khác.
+B) Sai: Tính đa hình không chỉ "cho phép" ghi đè, mà ghi đè là một cách thức để đạt được tính đa hình. Mặc dù không bắt buộc mọi lớp con phải ghi đè phương thức của lớp cha, nhưng khi cần thể hiện hành vi khác biệt cho cùng một phương thức ở lớp con, ghi đè là cần thiết.
+C) Đúng: Ghi đè phương thức (overriding) xảy ra trong mối quan hệ kế thừa (inheritance). Lớp con định nghĩa lại một phương thức đã có ở lớp cha, cho phép cùng một tên phương thức có hành vi khác nhau tùy thuộc vào đối tượng của lớp nào được gọi. Đây chính là một biểu hiện của tính đa hình.
+D) Sai: Tính đa hình và ghi đè phương thức có quan hệ mật thiết. Ghi đè là một phương pháp cụ thể để triển khai tính đa hình.
 
 ĐỊNH DẠNG ĐẦU RA:
-Các câu hỏi phải được định dạng chính xác theo cấu trúc sau, sử dụng các tag XML để dễ dàng parse:
+Các câu hỏi sẽ được định dạng theo mẫu sau:
 
-<questions>
-    <question id="1">
-        <text>
-        [Nội dung câu hỏi]
-        </text>
-        <choices>
-            <choice id="A">[Phương án A]</choice>
-            <choice id="B">[Phương án B]</choice>
-            <choice id="C">[Phương án C]</choice>
-            <choice id="D">[Phương án D]</choice>
-        </choices>
-        <answer>[A/B/C/D]</answer>
-        <explanation>
-        [Giải thích chi tiết tại sao đáp án này đúng]
-        </explanation>
-        <difficulty>[basic/intermediate/advanced]</difficulty>
-        <skill>[understanding/application/analysis/evaluation]</skill>
-    </question>
-</questions>
+--- Câu hỏi [số thứ tự] ---
+Q: [Nội dung câu hỏi]
+
+A) [Phương án A]
+B) [Phương án B]
+C) [Phương án C]
+D) [Phương án D]
+
+ĐÁP ÁN: [A/B/C/D]
+ĐỘ KHÓ: [basic/intermediate/advanced]
+
+GIẢI THÍCH:
+[Giải thích chi tiết tại sao đáp án này đúng và tại sao các đáp án khác sai]
 
 YÊU CẦU ĐẦU RA:
-- Tối thiểu 3 câu hỏi trắc nghiệm theo định dạng XML ở trên
-- Mỗi câu hỏi phải có đầy đủ các thành phần được định nghĩa trong cấu trúc
-- Các câu hỏi phải đại diện cho các mức độ khó và kỹ năng khác nhau
-- Nội dung trong các tag phải được viết trên một dòng (không xuống dòng)
+- Tạo tối thiểu 3 câu hỏi theo định dạng trên
+- Mỗi câu hỏi phải có đầy đủ các thành phần được yêu cầu
+- Các câu hỏi phải đại diện cho các mức độ khó khác nhau
+- Sử dụng các dấu phân cách "---" để ngăn cách giữa các câu hỏi
+- Mỗi phần (Q, A/B/C/D, ĐÁP ÁN, ĐỘ KHÓ, GIẢI THÍCH) phải bắt đầu trên một dòng mới
+
+Trước khi trả lời, hãy nhắc lại hai nguyên tắc sau đây, diễn giải cách hiểu của bạn và tuân theo nó:
+- Tuyệt đối không sử dụng các cụm từ meta như là "Theo văn bản", "Trong bài viết", "Dựa trên đoạn văn", "Từ những thông tin được cung cấp", hoặc các cụm từ tương tự trong các câu hỏi trắc nghiệm và phần giải thích kèm theo. Phần giải thích phải được diễn giải như thể bạn đã biết thông tin mà không cần tham khảo văn bản đầu vào.
+- Tránh đại từ và tên viết tắt không rõ ràng: Câu hỏi và trả lời cần tránh sử dụng đại từ chỉ định (như "này", "nọ", "kia", v.v.) hoặc tên viết tắt khi chưa giới thiệu đầy đủ đối tượng mà chúng đề cập đến trong chính câu đó.
+""".strip()
+
+mmlu_improve = """
+Câu hỏi cần khó hơn và phần giải thích cần chi tiết hơn. Trước khi trả lời, nhắc lại hai nguyên tắc sau đây:
+- Tuyệt đối không sử dụng các cụm từ meta như là "Theo văn bản", "Theo bài viết", "Dựa trên đoạn văn", "Từ những thông tin được cung cấp", hoặc các cụm từ tương tự trong các câu hỏi trắc nghiệm và phần giải thích kèm theo. Phần giải thích phải được diễn giải như thể bạn đã biết thông tin mà không cần tham khảo văn bản đầu vào.
+- Tránh đại từ và tên viết tắt không rõ ràng: Câu hỏi và trả lời cần tránh sử dụng đại từ chỉ định (như "này", "nọ", "kia", v.v.) hoặc tên viết tắt khi chưa giới thiệu đầy đủ đối tượng mà chúng đề cập đến trong chính câu đó.
 """.strip()
 
 conversation_template = """
