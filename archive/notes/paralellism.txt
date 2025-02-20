@@ -1,0 +1,8 @@
+memory, compute efficiency, communication
+
+---
+When training a neural network model, one store several items in memory:
+- Model weights
+- Model gradients
+- Optimizer states
+- Activations needed to compute the gradients
