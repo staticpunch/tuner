@@ -1,0 +1,3 @@
+
+%load_ext autoreload  # Loads the autoreload extension
+%autoreload 2        # Enables automatic reloading of all modules

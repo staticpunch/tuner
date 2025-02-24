@@ -1,0 +1,19 @@
+#ne Commands
+
+## Create pane
+Ctrl+b %    # vertical split
+Ctrl+b "    # horizontal split
+
+## Resize pane
+Ctrl+b :resize-pane -U <n>    # up n cells
+Ctrl+b :resize-pane -D <n>    # down n cells  
+Ctrl+b :resize-pane -L <n>    # left n cells
+Ctrl+b :resize-pane -R <n>    # right n cells
+
+## Quick Resize 
+Ctrl+b Alt+ArrowKey              # resize in direction
+
+## Close
+Ctrl+b x    # close current pane
+exit        # close current pane Tmux Pane Commands
+
